@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\ProductVariantPrice;
 use App\Models\Variant;
@@ -19,7 +20,8 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::paginate(3);
-        return view('products.index', compact('products'));        
+        $variants = Variant::all(); 
+        return view('products.index', compact('products', 'variants'));        
     }
 
     /**
@@ -29,7 +31,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $variants = Variant::all();
+        $variants = Variant::all();                
         return view('products.create', compact('variants'));
         
     }
@@ -45,7 +47,21 @@ class ProductController extends Controller
         $product = new Product();
         $product->fill($request->all());
         $product->save();
+
+        $image = new ProductImage(); 
+        $image->product_id = $product->id;       
+        $image->fill($request->all());
+        $image->save();
+
+        $product_variant = new ProductVariant();
+        //$product_variant->variant_id = $variant->id;
+        $product_variant->product_id = $product->id;          
+        $product_variant->fill($request->all());
+        $product_variant->save();
+
         return redirect()->back()->with('success', 'product Saved');
+
+
     }
 
 
@@ -101,8 +117,7 @@ class ProductController extends Controller
     public function search()
     {
         $search_title = $_GET['query'];
-        $products = Product::where('title', 'LIKE', '%'.$search_title.'%')->get();
-        //$varients = Variant::where('title', 'LIKE', '%'.$search_title.'%')->get();
+        $products = Product::where('title', 'LIKE', '%'.$search_title.'%')->get();        
         return view('products.search', compact('products'));
     }
 }

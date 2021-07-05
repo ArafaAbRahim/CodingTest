@@ -15,8 +15,11 @@
                 </div>
 
                 <div class="col-md-2">
-                    <select name="variant" id="" class="form-control">
-
+                    <select name="variant" id="" class="form-control">                        
+                        @foreach ($variants as $variant)
+                            <option value="{{$variant->id}}">{{$variant->title}}</option>
+                            <option value="{{$variant->id}}">{{$variant->description}}</option>
+                        @endforeach
                     </select>
                 </div>
                
@@ -31,7 +34,7 @@
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <input type="date" name="date" placeholder="Date" class="form-control">
+                    <input type="date" name="" placeholder="Date" class="form-control">
                 </div>
                
                 <div class="col-md-1">
@@ -58,21 +61,26 @@
                     @foreach($products as $key=>$product)
                         <tr>
                             <td>{{ $key +1 }}</td>
-                            <td>{{ $product->title }}</td>
+                            <td>{{ $product->title }} <br/>Created at: <br/> {{ $product->created_at }}</td>
                             <td>{{ nl2br($product->description) }}</td>
                             <td>
                                 <div>
-                                    <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">
-
-                                        <dt class="col-sm-3 pb-0">
-                                            SM/ Red/ V-Nick
+                                    <dl class="row mb-0" style="height: 100%; overflow: hidden" id="variant">
+                                        
+                                            
+                                        <dt class="col-sm-4 pb-0">
+                                            @foreach($variants as $variant)
+                                                {{$variant->title}}/{{$variant->description}}
+                                            @endforeach
                                         </dt>
-                                        <dd class="col-sm-9">
+                                                                                    
+                                        <dd class="col-sm-8">
                                             <dl class="row mb-0">
                                                 <dt class="col-sm-4 pb-0">Price : {{ number_format(200,2) }}</dt>
                                                 <dd class="col-sm-8 pb-0">InStock : {{ number_format(50,2) }}</dd>
                                             </dl>
                                         </dd>
+                                        
                                     </dl> 
                                 </div>                               
                             </td>

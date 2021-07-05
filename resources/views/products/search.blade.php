@@ -25,7 +25,7 @@
                 @foreach($products as $key=>$product)
                     <tr>
                         <td>{{ $key +1 }}</td>
-                        <td>{{ $product->title }}</td>
+                        <td>{{ $product->title }} <br/>Created at: <br/> {{ $product->created_at }}</td>
                         <td>{{ nl2br($product->description) }}</td>
                         <td>
                             <div>
