@@ -84,8 +84,9 @@ class ProductController extends Controller
      */
     public function edit( $id)
     {
-        $product = Product::findOrFail($id);
-        return view('products.edit', compact('product'));
+        $product = Product::findOrFail($id);         
+        $image = ProductImage::findOrFail($id);
+        return view('products.edit', compact('product', 'image'));
     }
 
     /**
@@ -100,6 +101,18 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->fill($request->all());
         $product->save();
+
+        $image = ProductImage::findOrFail($id); 
+        $image->product_id = $product->id;       
+        $image->fill($request->all());
+        $image->save();
+
+        $product_variant = ProductVariant::findOrFail($id);
+        //$product_variant->variant_id = $variant->id;
+        $product_variant->product_id = $product->id;          
+        $product_variant->fill($request->all());
+        $product_variant->save();
+
         return redirect()->back()->with('success', 'product Saved');
     }
 
